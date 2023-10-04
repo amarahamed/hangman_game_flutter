@@ -15,3 +15,43 @@ const TextStyle kBtnTitleTextStyle = TextStyle(
   fontFamily: 'Righteous',
   letterSpacing: 1,
 );
+
+// List<Widget> alphabetBtn(int start, int end) {
+//   List<Widget> buttons = [];
+//
+//   for (int x = start; x < end; x++) {
+//     buttons.add(Expanded(
+//       child: Padding(
+//         padding: const EdgeInsets.symmetric(horizontal: 2.5),
+//         child: ElevatedButton(
+//           onPressed: () {},
+//           style: ElevatedButton.styleFrom(
+//               backgroundColor: const Color(0xFFD9D9D9),
+//               foregroundColor: Colors.black87),
+//           child: Text(
+//             alphabets.elementAt(x),
+//             style: const TextStyle(
+//               fontSize: 16,
+//               fontFamily: 'Righteous',
+//             ),
+//           ),
+//         ),
+//       ),
+//     ));
+//   }
+//
+//   return buttons;
+// }
+
+// Row(
+// children: alphabetBtn(0, 7),
+// ),
+// Row(
+// children: alphabetBtn(7, 14),
+// ),
+// Row(
+// children: alphabetBtn(14, 21),
+// ),
+// Row(
+// children: alphabetBtn(21, 26),
+// ),

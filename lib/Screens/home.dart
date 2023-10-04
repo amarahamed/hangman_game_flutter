@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hangman_game/Screens/gameScreen.dart';
+import 'package:hangman_game/models/game_brain.dart';
+import 'package:hangman_game/models/word_model.dart';
 import 'package:hangman_game/utilities/constants.dart';
 
 class Home extends StatelessWidget {
@@ -71,7 +74,30 @@ class ReusableBtn extends StatelessWidget {
     return Expanded(
       child: ElevatedButton(
         onPressed: () {
-          print('Hello');
+          List<WordModel> words = [];
+          GameBrain gameBrain = GameBrain();
+
+          switch (btnTitle) {
+            case "Football":
+              {
+                words = gameBrain.getFootballWords();
+              }
+              break;
+            case "Easy":
+              {
+                words = gameBrain.getEasyWords();
+              }
+              break;
+            default:
+              {
+                words = gameBrain.getEasyWords();
+              }
+              break;
+          }
+
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return GameScreen(words);
+          }));
         },
         style: ElevatedButton.styleFrom(
             backgroundColor: kBtnBackgroundColor,
