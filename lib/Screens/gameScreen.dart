@@ -74,42 +74,43 @@ class _GameScreenState extends State<GameScreen> {
       buttons.add(ElevatedButton(
         onPressed: () {
           // check if the letter has been already used
-          if (usedLetters.contains(alphabets[x])) {
-            // say already used
-            Alert(
-                    context: context,
-                    title: "Already Used!",
-                    desc: "The letter ${alphabets[x]} already used")
-                .show();
-          } else {
-            setState(() {
-              usedLetters.add(alphabets[x].toUpperCase());
-            });
-
-            if (wordInUpperCase.contains(alphabets[x].toUpperCase())) {
-              print("Letter matched!");
-              for (int y = 0; y <= wordInUpperCase.length - 1; y++) {
-                if (wordInUpperCase[y] == alphabets[x].toUpperCase()) {
-                  // update screen with the new letter
-                  setState(() {
-                    wordArrayHidden[y] = alphabets[x].toUpperCase();
-                    print("Hidden Array: $wordArrayHidden");
-                    updateScreen();
-                  });
-                }
-              }
+          if (lives < 6) {
+            if (usedLetters.contains(alphabets[x])) {
+              // say already used
+              Alert(
+                      context: context,
+                      title: "Already Used!",
+                      desc: "The letter ${alphabets[x]} already used")
+                  .show();
             } else {
-              print("Letter not in the word : (");
-              if (lives == 6) {
-                Alert(
-                        context: context,
-                        title: "Game Over!",
-                        desc: "Hangman Died : (")
-                    .show();
+              setState(() {
+                usedLetters.add(alphabets[x].toUpperCase());
+              });
+
+              if (wordInUpperCase.contains(alphabets[x].toUpperCase())) {
+                print("Letter matched!");
+                for (int y = 0; y <= wordInUpperCase.length - 1; y++) {
+                  if (wordInUpperCase[y] == alphabets[x].toUpperCase()) {
+                    // update screen with the new letter
+                    setState(() {
+                      wordArrayHidden[y] = alphabets[x].toUpperCase();
+                      print("Hidden Array: $wordArrayHidden");
+                      updateScreen();
+                    });
+                  }
+                }
               } else {
-                lives++;
+                setState(() {
+                  lives++;
+                });
               }
             }
+          } else {
+            Alert(
+                    context: context,
+                    title: "Game Over!",
+                    desc: "Hangman Died : (")
+                .show();
           }
         },
         style: ElevatedButton.styleFrom(
@@ -139,7 +140,7 @@ class _GameScreenState extends State<GameScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           // Add asset image
-          Image.asset("assets/images/1.png"),
+          Image.asset("assets/images/$lives.png"),
           // number of blanks
           Center(
             child: Text(
