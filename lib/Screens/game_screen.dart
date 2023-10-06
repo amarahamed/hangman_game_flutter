@@ -5,6 +5,7 @@ import 'package:hangman_game/models/word_model.dart';
 import 'package:hangman_game/utilities/constants.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+// generates all alphabets
 final alphabets = List.generate(26, (index) => String.fromCharCode(index + 65));
 
 class GameScreen extends StatefulWidget {
@@ -17,8 +18,8 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
+  // stores all alphabetic keys
   List<Widget> listBtns = [];
-  // String word = widget.words.elementAt(0).word;
 
   // used letters
   List<String> usedLetters = [];
@@ -26,16 +27,23 @@ class _GameScreenState extends State<GameScreen> {
   // List of char array of the guessing word
   List<String> wordArray = [];
 
-  // List of char array of the guessing word (Hidden as dashes)
+  // List of char array of the guessing word (Hidden as underscores)
   List<String> wordArrayHidden = [];
 
+  // guessedWord will update each time a letter found
   String guessWord = "";
 
-  List<String> wordInUpperCase = [];
+  // List<String> wordInUpperCase = [];
 
   // max 6
   int lives = 0;
 
+  bool gameWon = false;
+
+  // Guessing Word Model
+  late WordModel wordModel;
+
+  // Method adds _ to every letter of the guessing word and store in a string array like a character array
   void updateHiddenWord() {
     for (String c in wordArray) {
       wordArrayHidden.add("_");
@@ -51,20 +59,25 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
+  // show alert whenever called
+  void showAlert(String alertTitle, String description) {
+    Alert(context: context, title: alertTitle, desc: description).show();
+  }
+
   @override
   void initState() {
     super.initState();
     listBtns = alphabetBtn();
 
     // get a random word from the passed List
-    WordModel w = widget.words[Random.secure().nextInt(widget.words.length)];
+    wordModel = widget.words[Random.secure().nextInt(widget.words.length)];
     // save to word array as a character array ex: ['H', 'E', 'L', 'L', 'O']
-    wordArray = w.word.split('');
+    wordArray = wordModel.word.split('');
 
     updateHiddenWord();
+    // updates screen to show how many letters to be found
     updateScreen();
-    print(wordArray);
-    wordInUpperCase = wordArray.map((e) => e.toUpperCase()).toList();
+    print("Word ArrayL: $wordArray");
   }
 
   List<Widget> alphabetBtn() {
@@ -73,55 +86,61 @@ class _GameScreenState extends State<GameScreen> {
     for (int x = 0; x < 26; x++) {
       buttons.add(ElevatedButton(
         onPressed: () {
-          // check if the letter has been already used
-          if (lives < 6) {
-            if (usedLetters.contains(alphabets[x])) {
-              // say already used
-              Alert(
-                      context: context,
-                      title: "Already Used!",
-                      desc: "The letter ${alphabets[x]} already used")
-                  .show();
-            } else {
-              setState(() {
-                usedLetters.add(alphabets[x].toUpperCase());
-              });
-
-              if (wordInUpperCase.contains(alphabets[x].toUpperCase())) {
-                print("Letter matched!");
-                for (int y = 0; y <= wordInUpperCase.length - 1; y++) {
-                  if (wordInUpperCase[y] == alphabets[x].toUpperCase()) {
-                    // update screen with the new letter
-                    setState(() {
-                      wordArrayHidden[y] = alphabets[x].toUpperCase();
-                      print("Hidden Array: $wordArrayHidden");
-                      updateScreen();
-                    });
-                  }
-                }
+          // check if game won
+          if (!gameWon) {
+            // check if player has enough lives
+            if (lives < 6) {
+              // check if the letter has been already used
+              if (usedLetters.contains(alphabets[x])) {
+                // Alert player that the letter has been already used
+                showAlert("Already Used", "${alphabets[x]} already used");
               } else {
+                // change state for the used letter
                 setState(() {
-                  lives++;
+                  usedLetters.add(alphabets[x]);
                 });
+
+                // check if letter
+                if (wordArray.contains(alphabets[x])) {
+                  for (int y = 0; y <= wordArray.length - 1; y++) {
+                    if (wordArray[y] == alphabets[x]) {
+                      // update screen with the new letter
+                      setState(() {
+                        wordArrayHidden[y] = alphabets[x];
+                        // wordArray[y] = alphabets[x];
+                        updateScreen();
+
+                        if (wordArrayHidden.join() ==
+                            wordModel.word.toUpperCase()) {
+                          gameWon = true;
+
+                          showAlert("You Won", "Good Job! You found the word!");
+                        }
+                      });
+                    }
+                  }
+                } else {
+                  setState(() {
+                    lives++;
+                  });
+                }
               }
+            } else {
+              showAlert("Game Over", "Hangman died : ( ");
             }
           } else {
-            Alert(
-                    context: context,
-                    title: "Game Over!",
-                    desc: "Hangman Died : (")
-                .show();
+            showAlert("You Won", "Good Job! You found the word!");
           }
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFFD9D9D9),
           foregroundColor: Colors.black87,
-          minimumSize: const Size(40, 40),
+          minimumSize: const Size(36, 36),
         ),
         child: Text(
           alphabets.elementAt(x),
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 13,
             fontFamily: 'Righteous',
           ),
         ),
@@ -145,16 +164,16 @@ class _GameScreenState extends State<GameScreen> {
           Center(
             child: Text(
               guessWord,
-              style: kTitleTextStyle,
+              style: kWordTextStyle,
             ),
           ),
           // keypad
           Padding(
-            padding: const EdgeInsets.all(26.0),
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             child: Center(
               child: Wrap(
                 spacing: 4,
-                runSpacing: 4,
+                runSpacing: 2,
                 alignment: WrapAlignment.start,
                 direction: Axis.horizontal,
                 children: listBtns,
@@ -163,22 +182,25 @@ class _GameScreenState extends State<GameScreen> {
           ),
           // used letters
 
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.,
             children: [
               const Text(
-                'USED: ',
+                'USED',
                 style: kBtnTitleTextStyle,
               ),
-              // const SizedBox(
-              //   width: 5,
-              // ),
+              const SizedBox(
+                height: 5,
+              ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: usedLetters
                     .map((e) => Padding(
                           padding: const EdgeInsets.only(right: 5),
                           child: Container(
-                            padding: const EdgeInsets.all(5),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 4.5, vertical: 3),
                             decoration: BoxDecoration(
                               color: const Color(0xFFD9D9D9),
                               borderRadius: BorderRadius.circular(5),

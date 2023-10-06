@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hangman_game/Screens/gameScreen.dart';
+import 'package:hangman_game/Screens/game_screen.dart';
 import 'package:hangman_game/models/game_brain.dart';
 import 'package:hangman_game/models/word_model.dart';
 import 'package:hangman_game/utilities/constants.dart';
@@ -85,12 +85,20 @@ class ReusableBtn extends StatelessWidget {
               break;
             case "Easy":
               {
-                words = gameBrain.getEasyWords();
+                words = gameBrain.getRandomWords();
               }
               break;
+            case "Hard":
+              {
+                words = gameBrain.getHardWords();
+              }
+            case "Movies":
+              {
+                words = gameBrain.getMovies();
+              }
             default:
               {
-                words = gameBrain.getEasyWords();
+                words = gameBrain.getRandomWords();
               }
               break;
           }

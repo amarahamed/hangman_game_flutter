@@ -10,9 +10,9 @@ class WordModel {
     _wordCategory = value;
   }
 
-  String get word => _word;
+  String get word => _word.toUpperCase();
 
   set word(String value) {
-    _word = value;
+    _word = value.trim().toUpperCase();
   }
 }

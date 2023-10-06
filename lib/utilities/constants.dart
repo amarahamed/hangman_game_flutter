@@ -9,6 +9,12 @@ const TextStyle kTitleTextStyle = TextStyle(
   fontFamily: 'Righteous',
 );
 
+const TextStyle kWordTextStyle = TextStyle(
+  fontSize: 42,
+  color: Color(0xFFFFFFFF),
+  fontFamily: 'Righteous',
+);
+
 const TextStyle kBtnTitleTextStyle = TextStyle(
   fontSize: 20,
   color: Color(0xFFFFFFFF),
