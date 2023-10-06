@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hangman_game/models/word_model.dart';
 import 'package:hangman_game/utilities/constants.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+// play audio
+import 'package:audioplayers/audioplayers.dart';
 
 // generates all alphabets
 final alphabets = List.generate(26, (index) => String.fromCharCode(index + 65));
@@ -42,6 +44,9 @@ class _GameScreenState extends State<GameScreen> {
 
   // Guessing Word Model
   late WordModel wordModel;
+
+  // Audio Player
+  AudioPlayer audioPlayer = AudioPlayer();
 
   // Method adds _ to every letter of the guessing word and store in a string array like a character array
   void updateHiddenWord() {
@@ -85,11 +90,11 @@ class _GameScreenState extends State<GameScreen> {
 
     for (int x = 0; x < 26; x++) {
       buttons.add(ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           // check if game won
           if (!gameWon) {
             // check if player has enough lives
-            if (lives < 6) {
+            if (lives < 5) {
               // check if the letter has been already used
               if (usedLetters.contains(alphabets[x])) {
                 // Alert player that the letter has been already used
@@ -102,6 +107,9 @@ class _GameScreenState extends State<GameScreen> {
 
                 // check if letter
                 if (wordArray.contains(alphabets[x])) {
+                  await audioPlayer
+                      .setSource(AssetSource('audio/correct_answer.mp3'));
+                  await audioPlayer.resume();
                   for (int y = 0; y <= wordArray.length - 1; y++) {
                     if (wordArray[y] == alphabets[x]) {
                       // update screen with the new letter
@@ -113,23 +121,37 @@ class _GameScreenState extends State<GameScreen> {
                         if (wordArrayHidden.join() ==
                             wordModel.word.toUpperCase()) {
                           gameWon = true;
-
-                          showAlert("You Won", "Good Job! You found the word!");
+                          showAlert("You Won 🥳", "You found the word!");
                         }
                       });
+                      // play audio outside setState
+                      if (wordArrayHidden.join() ==
+                          wordModel.word.toUpperCase()) {
+                        await audioPlayer
+                            .setSource(AssetSource('audio/game_won.mp3'));
+                        await audioPlayer.resume();
+                      }
                     }
                   }
                 } else {
+                  await audioPlayer
+                      .setSource(AssetSource('audio/wrong_answer.mp3'));
+                  await audioPlayer.resume();
                   setState(() {
                     lives++;
                   });
                 }
               }
             } else {
-              showAlert("Game Over", "Hangman died : ( ");
+              await audioPlayer.setSource(AssetSource('audio/game_over.mp3'));
+              await audioPlayer.resume();
+              setState(() {
+                lives = 6;
+              });
+              showAlert("Hangman died 😢", "Word was ${wordModel.word}");
             }
           } else {
-            showAlert("You Won", "Good Job! You found the word!");
+            showAlert("You Won 🥳", "You found the word!");
           }
         },
         style: ElevatedButton.styleFrom(
