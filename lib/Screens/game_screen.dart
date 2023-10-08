@@ -85,46 +85,54 @@ class _GameScreenState extends State<GameScreen> {
     print("Word ArrayL: $wordArray");
   }
 
+  // Returns a list of alphabet key pad
   List<Widget> alphabetBtn() {
     List<Widget> buttons = [];
 
+    // 26 alphabets
     for (int x = 0; x < 26; x++) {
       buttons.add(ElevatedButton(
+        // on pressed function for each button
         onPressed: () async {
-          // check if game won
+          // check if game won - doesn't let to tap if game already won
           if (!gameWon) {
             // check if player has enough lives
             if (lives < 5) {
-              // check if the letter has been already used
+              // check if the input letter has been already used
               if (usedLetters.contains(alphabets[x])) {
                 // Alert player that the letter has been already used
                 showAlert("Already Used", "${alphabets[x]} already used");
               } else {
-                // change state for the used letter
+                // change state for the used letter list
                 setState(() {
                   usedLetters.add(alphabets[x]);
                 });
 
-                // check if letter
+                // check if letter guessed is correct
                 if (wordArray.contains(alphabets[x])) {
+                  // play answer found tone
                   await audioPlayer
                       .setSource(AssetSource('audio/correct_answer.mp3'));
                   await audioPlayer.resume();
+
+                  // replace the dash in wordArrayHidden with the correctly guessed letter
                   for (int y = 0; y <= wordArray.length - 1; y++) {
                     if (wordArray[y] == alphabets[x]) {
                       // update screen with the new letter
                       setState(() {
                         wordArrayHidden[y] = alphabets[x];
-                        // wordArray[y] = alphabets[x];
                         updateScreen();
 
+                        // check if all letters has been found
                         if (wordArrayHidden.join() ==
                             wordModel.word.toUpperCase()) {
+                          // flag the system game won
                           gameWon = true;
+                          // show alert to say game won
                           showAlert("You Won 🥳", "You found the word!");
                         }
                       });
-                      // play audio outside setState
+                      // play game won tone outside setState
                       if (wordArrayHidden.join() ==
                           wordModel.word.toUpperCase()) {
                         await audioPlayer
@@ -137,20 +145,25 @@ class _GameScreenState extends State<GameScreen> {
                   await audioPlayer
                       .setSource(AssetSource('audio/wrong_answer.mp3'));
                   await audioPlayer.resume();
+                  // increment life left, max: 6
                   setState(() {
                     lives++;
                   });
                 }
               }
             } else {
+              // if all lives over play game over tone
               await audioPlayer.setSource(AssetSource('audio/game_over.mp3'));
               await audioPlayer.resume();
+              // update hangman image
               setState(() {
                 lives = 6;
               });
+              // show alert saying game over
               showAlert("Hangman died 😢", "Word was ${wordModel.word}");
             }
           } else {
+            // show alert saying game already won, triggers when user taps on button after game won
             showAlert("You Won 🥳", "You found the word!");
           }
         },
@@ -180,16 +193,18 @@ class _GameScreenState extends State<GameScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          // Add asset image
+          // hangman image - updates each time user losses life
           Image.asset("assets/images/$lives.png"),
-          // number of blanks
+          // guess letters
           Center(
             child: Text(
               guessWord,
               style: kWordTextStyle,
             ),
           ),
+          //
           // keypad
+          //
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             child: Center(
@@ -202,8 +217,9 @@ class _GameScreenState extends State<GameScreen> {
               ),
             ),
           ),
+          //
           // used letters
-
+          //
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             // crossAxisAlignment: CrossAxisAlignment.,
