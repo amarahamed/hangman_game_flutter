@@ -1,16 +1,62 @@
-# hangman_game
+# Hangman Game - Flutter
 
-A new Flutter project.
+A classic Hangman game built using Flutter for Android and iOS platforms. This project was developed as a personal project to learn Flutter and to get proficient in the basics.
+
+![Game Screenshot](assets/readme-image-1.png)  ![](assets/readme-image-2.png)
+
+
+## Features
+
+- Classic Hangman gameplay with a word guessing challenge.
+- 4 modes to play: Easy, Hard, Football and Movies
+- A variety of words to guess, providing endless fun.
+- User-friendly interface.
+- Enjoyable sound effects for an immersive gaming experience.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+These instructions will help you get a copy of the project up and running on your local machine for development and testing purposes.
 
-A few resources to get you started if this is your first Flutter project:
+### Prerequisites
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+To run this project, you need to have Flutter and Dart installed on your development machine.  You will need a android system (an emulator or an android device) for windows or an ios system (iPhone emulator or an iPhone device) for mac users. You can download them from [here](https://flutter.dev/docs/get-started/install).
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Installation
+
+1. Clone this repository to your local machine using:
+
+   ```shell
+   git clone https://github.com/amarahamed/hangman_game_flutter.git
+
+2. Navigate to the project directory:
+
+   cd hangman-flutter
+
+3. Install the project dependencies:
+
+   flutter pub get
+
+4. Run the app on your preferred emulator or physical device:
+
+   flutter run
+
+
+### Gameplay
+
+- **Launch the game on your device.**
+  To get started, simply open the game on your Android or iOS device.
+
+- **Select a mode**
+  Choose a mode from the main screen. Your have 4 options. The easy mode generates 60 random words from the english_words package and the game picks one from that list for you to guess. Football, Hard and Movies are hard coded to an array and picks one from that list for you to guess.
+
+- **Start guessing letters to complete the hidden word.**
+  Use the on-screen keyboard to guess individual letters.
+
+- **You have a limited number of incorrect guesses before the game ends.**
+  Be careful! You only have a certain number of incorrect guesses available. Make each guess count.
+
+
+
+### Built With
+- [Flutter](https://flutter.dev/) - The cross-platform framework used.
+- [Dart](https://dart.dev/) - The programming language used.
