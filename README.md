@@ -2,7 +2,10 @@
 
 A classic Hangman game built using Flutter for Android and iOS platforms. This project was developed as a personal project to learn Flutter and to get proficient in the basics.
 
-![](assets/readme-image-1.png)  ![](assets/readme-image-2.png)
+<div align="center">
+  <img src="assets/readme-image-1.png" width="300" alt="Game Screenshot 1">
+  <img src="assets/readme-image-2.png" width="300" alt="Game Screenshot 2">
+</div>
 
 
 ## Features
