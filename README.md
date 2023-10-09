@@ -43,7 +43,6 @@ To run this project, you need to have Flutter and Dart installed on your develop
     ```shell
    flutter run
 
-
 ### Gameplay
 
 - **Launch the game on your device.**
