@@ -10,7 +10,7 @@ A classic Hangman game built using Flutter for Android and iOS platforms. This p
 
 ## Features
 
-- Classic Hangman gameplay with a word guessing challenge.
+- Classic Hangman gameplay with a word-guessing challenge.
 - 4 modes to play: Easy, Hard, Football and Movies
 - A variety of words to guess, providing endless fun.
 - User-friendly interface.
@@ -32,15 +32,15 @@ To run this project, you need to have Flutter and Dart installed on your develop
    git clone https://github.com/amarahamed/hangman_game_flutter.git
 
 2. Navigate to the project directory:
-
+   ```shell
    cd hangman-flutter
 
 3. Install the project dependencies:
-
+    ```shell
    flutter pub get
 
 4. Run the app on your preferred emulator or physical device:
-
+    ```shell
    flutter run
 
 
